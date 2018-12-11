@@ -3,8 +3,9 @@ import java.util.*; // for StringTokenizer
 
 /*
 Michael Merabi
-Project #4
-Graphing and pathing
+Project #4 Graph
+Lorentz Project #4
+12/11/18
  */
 
     class Edge_Node {
@@ -95,6 +96,15 @@ class Graph {
         size = 0;
     }
 
+    public void clearAll(){
+        Vertex_Node current = this.head;
+        while(current != null){
+            current.setDistance(-1);
+            current.setVisited(false);
+            current = current.getNext();
+        }
+    }
+
     public Vertex_Node findVertex(String s) {
         Vertex_Node pt = head;
         while (pt != null && s.compareTo(pt.getName()) != 0) {
@@ -158,7 +168,6 @@ class Graph {
         return source;
     }
 
-
     public void output() {
         Vertex_Node v = head;
         Edge_Node e;
@@ -218,22 +227,42 @@ class Graph {
         if (vertex_check() != null ){
             output_bfs(vertex_check());
         }
+        clearAll();
     }
-        /*
-        First add S (placeholder) to the queue
-        then while the queue is not empty set the edge node new variable
-        get all the neighbors of S on the new edge node
-        add them to the queue
-        you remove the top of the queue (s)
-        print (values of S)
-        set the new S to the top of the Queue
-        Run again
 
-        */
+    public void output_dfs(Vertex_Node s) {
+        recursive_dfs(s,0);
+        //check to make sure this
+        if (vertex_check() != null ) {
+            output_dfs(vertex_check());
+        }
+        clearAll();
+        //clear all just in case
+    }
 
-    public void output_dfs(Vertex_Node s) { }
+    public void recursive_dfs(Vertex_Node s, int distance){
+       Vertex_Node current = s;
+       current.setVisited(true); // set distance in start
+       current.setDistance(distance);// passed in distance
 
-    // If you implemented DFS then leave this method the way it is
+        if (current.getParent() == null) {
+            System.out.println( current.getName() + ", " + current.getDistance() + ", " + " Null");
+        } else {
+            System.out.println( current.getName() + ", " + current.getDistance() + ", " + current.getParent().getName());
+        } //reuse the print from bfs
+
+        Edge_Node edgeHold = current.getNbrList(); // gets the neighbor of start vertex
+
+        while (edgeHold != null){
+            if (edgeHold.getTarget().getVisited() == false) {
+                edgeHold.getTarget().setParent(s);
+                recursive_dfs(edgeHold.getTarget(), distance + 1);
+            } // set parent within the while loop and recursively go down the line
+            edgeHold = edgeHold.getNext();
+        }
+    }
+
+
     // If you did not implement DFS then change the “true” to “false”
     public static boolean implementedDFS() {
         return true;
@@ -241,44 +270,5 @@ class Graph {
 
     public static String myName() {
         return "Michael Merabi";
-    }
-}
-
-class testGraphTraversals {
-    final static String GraphLocation = new String(
-            "C:/Users/merab/Desktop/");
-
-    public static void main(String[] args) throws IOException {
-        Vertex_Node startVertex;
-        Graph g;
-
-        for (int i = 1; i <= 10; i++) {
-            g = new Graph();
-            startVertex = g.input(GraphLocation + "Graph" + i + ".txt");
-            System.out.println("Test #" + i + ":  BFS  -- " + Graph.myName());
-            System.out.println("=======");
-            g.output_bfs(startVertex);
-            System.out.println();
-            if (i == 3) {
-                System.out.println("=======");
-                g.output_bfs(startVertex);
-                System.out.println();
-
-            }
-            if (Graph.implementedDFS()) {
-                System.out.println("Test #" + i + ":  DFS  -- "
-                        + Graph.myName());
-                System.out.println("=======");
-                g.output_dfs(startVertex);
-                System.out.println();
-                if (i == 3) {
-                    System.out.println("=======");
-                    g.output_dfs(startVertex);
-                    System.out.println();
-
-                }
-            }
-        }
-        System.out.println("Done with " + Graph.myName() + "'s test run.");
     }
 }
