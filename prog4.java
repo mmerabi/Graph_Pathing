@@ -1,13 +1,6 @@
 import java.io.*; // for BufferedReader
 import java.util.*; // for StringTokenizer
 
-/*
-Michael Merabi
-Project #4 Graph
-Lorentz Project #4
-12/11/18
- */
-
     class Edge_Node {
         private Vertex_Node target;
         private Edge_Node next;
@@ -262,13 +255,11 @@ class Graph {
         }
     }
 
-
-    // If you did not implement DFS then change the “true” to “false”
     public static boolean implementedDFS() {
         return true;
     }
 
     public static String myName() {
-        return "Michael Merabi";
+        return "Santa Claus";
     }
 }
